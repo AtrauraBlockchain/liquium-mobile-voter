@@ -1,0 +1,81 @@
+.poll-view
+{
+	background-color: $content-bg !important;
+
+	.poll-heading
+	{
+		padding-top: 8px;
+		padding-bottom: 8px;
+		background-color: darken($poll-heading-color, 10%);
+		border-color: #000;
+
+		.poll-title
+		{
+			color: $poll-title-color;
+		}
+
+		.poll-date
+		{
+			font-weight: 500;
+		}
+	}
+
+	.poll-content
+	{
+		padding-top: 8px;
+		padding-bottom: 0px;
+
+		.poll-excerpt
+		{
+			overflow: hidden;
+			text-overflow: ellipsis;
+			@include display(flex);
+			@include flex-direction(column);
+			-webkit-line-clamp: $poll-excerpt-lines; /* number of lines to show */
+			line-height: $poll-font-size + 4;        /* fallback */
+			font-size: $poll-font-size;        /* fallback */
+			max-height: ($poll-font-size + 4) * $poll-excerpt-lines;       /* fallback */
+
+			*
+			{
+				font-size: inherit !important;
+			}
+		}
+
+		.poll-actions
+		{
+			padding: 10px 0px;
+
+			.col
+			{
+				padding:0px;
+			}
+
+			.actions
+			{
+				.button-icon
+				{
+					min-height: initial;
+					line-height: 28px;
+					padding: 0px;
+					vertical-align: middle;
+					margin-right: 10px;
+				}
+
+				.button-icon:before
+				{
+					font-size: 28px;
+					line-height: 28px;
+				}
+			}
+
+			.vote
+			{
+				.button
+				{
+					margin:0px;
+				}
+			}
+		}
+	}
+}

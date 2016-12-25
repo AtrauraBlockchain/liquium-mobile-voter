@@ -1,0 +1,126 @@
+{
+    "cordova-plugin-console": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-console@^1.0.1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-device": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-device@^1.0.1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-dialogs": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-dialogs@^1.1.1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-globalization": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-globalization@^1.0.1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-extension": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-extension@^1.1.4"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.synconset.imagepicker": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/startapplabs/cordova-imagePicker.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-inappbrowser": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-inappbrowser@^1.0.1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-iad": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-iad@^2.0.4"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-admobpro": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-admobpro@^2.8.3"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-whitelist": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-whitelist@^1.0.0"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-email-composer": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/katzer/cordova-plugin-email-composer.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "com.phonegap.plugins.PushPlugin": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/phonegap-build/PushPlugin.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "ionic-plugin-keyboard": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/driftyco/ionic-plugins-keyboard.git",
+            "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-geolocation": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-geolocation@^1.0.1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-splashscreen": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-splashscreen@^2.1.0"
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}

@@ -1,0 +1,14 @@
+$poll-category-bg: $theme-color-3;
+$poll-category-color: #FFFFFF;
+
+//Feed entries
+$poll-heading-color: $theme-color-3;
+$poll-title-color: #FFFFFF;
+
+$poll-excerpt-lines: 5;
+$poll-font-size: 14px;
+
+$feed-categories-img-ratio: 1 1;
+
+// Merge maps
+$pre-img-ratios: append($pre-img-ratios, $feed-categories-img-ratio);

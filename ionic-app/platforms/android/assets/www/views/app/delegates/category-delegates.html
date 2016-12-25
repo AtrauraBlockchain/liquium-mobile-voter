@@ -1,0 +1,20 @@
+<ion-view class="category-delegates-view">
+  <ion-nav-title>
+    <span>{{categoryTitle}} delegates</span>
+  </ion-nav-title>
+  <ion-content>
+    <div class="list category-polls">
+      <a ng-repeat="delegate in category_delegates" class="item item-icon-right">
+          <div>
+            <span class="title">{{delegate.title}}</span>
+          </div>
+          <div>
+            <span class="title">{{delegate.address}}</span>
+          </div>
+          <button class="button button-positive button-small button-block button-assertive" ng-click="showConfirm(delegate.address)">
+            Choose
+          </button>
+      </a>
+    </div>
+  </ion-content>
+</ion-view>

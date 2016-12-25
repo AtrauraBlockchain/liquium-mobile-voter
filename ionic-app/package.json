@@ -1,0 +1,58 @@
+{
+  "name": "liquium",
+  "version": "1.2.0",
+  "description": "Liquium: Liquid democracy in the Ethereum Blockchain",
+  "dependencies": {
+    "async": "^2.1.4",
+    "bower": "^1.3.3",
+    "gulp": "^3.5.6",
+    "gulp-angular-templatecache": "^2.0.0",
+    "gulp-sass": "^2",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-util": "^3.0.7",
+    "require-dir": "^0.3.0",
+    "shelljs": "^0.7.5"
+  },
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp-flatten": "^0.3.1",
+    "gulp-if": "^2.0.2",
+    "gulp-json-editor": "^2.2.1",
+    "gulp-minify-css": "^1.2.0",
+    "gulp-ng-annotate": "^2.0.0",
+    "gulp-ng-constant": "^2.0.0-2",
+    "gulp-preprocess": "^2.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-shell": "^0.5.2",
+    "gulp-uglify": "^2.0.0",
+    "gulp-useref": "^3.1.2",
+    "jshint": "^2.8.0",
+    "minimist": "^1.1.2",
+    "mv": "^2.1.1",
+    "node-sass": "^4.1.0"
+  },
+  "cordovaPlugins": [
+    "https://github.com/phonegap-build/PushPlugin.git",
+    "com.ionic.keyboard",
+    "org.pushandplay.cordova.apprate",
+    "https://github.com/katzer/cordova-plugin-email-composer.git",
+    "cordova-plugin-extension",
+    "cordova-plugin-console@^1.0.1",
+    "cordova-plugin-device@^1.0.1",
+    "cordova-plugin-dialogs@^1.1.1",
+    "cordova-plugin-globalization@^1.0.1",
+    "cordova-plugin-whitelist@1.0.0",
+    "cordova-plugin-admobpro",
+    "com.rjfun.cordova.iad",
+    "cordova-plugin-inappbrowser",
+    "nl.x-services.plugins.socialsharing",
+    "com.synconset.imagepicker",
+    "cordova-plugin-geolocation",
+    "cordova-plugin-splashscreen"
+  ],
+  "cordovaPlatforms": [
+    "ios",
+    "android"
+  ]
+}

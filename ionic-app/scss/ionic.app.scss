@@ -1,0 +1,31 @@
+// Include Sass mixins
+@import "scss/utils/mixins";
+
+// Include Theme variables
+@import "scss/common/theme.variables";
+// Include Ionic override variables
+@import "scss/utils/override_variables";
+
+// Include Bourbon
+@import "www/lib/bourbon/app/assets/stylesheets/_bourbon";
+// Include all of Ionic
+@import "www/lib/ionic/scss/ionic";
+
+// Include Ionic override styles
+@import "scss/utils/override_styles";
+
+// Include project Sass variables
+@import "scss/common/common.variables";
+@import "scss/sidemenu/side-menu.variables";
+@import "scss/profile/profile.variables";
+@import "scss/poll/poll.variables";
+
+
+@import "scss/sidemenu/side-menu.styles";
+@import "scss/profile/profile.styles";
+
+@import "scss/poll/category-polls.styles";
+@import "scss/poll/poll.styles";
+@import "scss/poll/polls-categories.styles";
+
+@import "scss/delegates/delegates.styles";

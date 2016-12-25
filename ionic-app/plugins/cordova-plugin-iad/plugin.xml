@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+           id="cordova-plugin-iad"
+      version="2.0.5">
+      
+    <name>iAd PluginPro</name>
+	<description>Cordova plugin for Apple iAd banner and interstitial to monetize apps</description>
+	<author>Liming Xie</author>
+	<license>MIT</license>    
+	<keywords>rjfun,ad,iad</keywords>
+    <repo>https://github.com/floatinghotpot/cordova-iad-pro.git</repo>
+    <issue>https://github.com/floatinghotpot/cordova-iad-pro/issues</issue>
+
+	<engines>
+	    <engine name="cordova" version=">=3.0" />
+	</engines>
+
+    <js-module src="www/iAd.js" name="iAd">
+        <clobbers target="window.iAd" />
+    </js-module>
+    
+    <dependency id="cordova-plugin-extension"/>
+
+     <!-- ios -->
+     <platform name="ios">    
+         <config-file target="config.xml" parent="/*">
+             <feature name="iAd">
+                 <param name="ios-package" value="iAdPlugin" />
+             </feature>
+         </config-file>
+         <header-file src="iAdPlugin.h"/>
+         <source-file src="iAdPlugin.m"/>
+ 	     <framework src="iAd.framework" weak="true"/>
+	</platform>
+          
+</plugin>
