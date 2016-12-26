@@ -16,6 +16,10 @@ First of all you have to install [Ionic](https://ionicframework.com/getting-star
 
 Then, you're ready to build your develop version of the app using the following commands:
 
+```
+npm install
+``
+
 #### Android
 
 ```
