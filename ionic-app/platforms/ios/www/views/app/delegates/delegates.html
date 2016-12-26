@@ -1,0 +1,20 @@
+<ion-view class="category-polls-view">
+  <ion-nav-title>
+    <span>Delegates</span>
+  </ion-nav-title>
+  <ion-content>
+    <div class="list delegates-category-row">
+      <a ng-repeat="cat_del in categories_delegates" class="item item-icon-right" ui-sref="app.category-delegates({category: (cat_del.category.id | slugify)})">
+        <div class="row category-row">
+          <div class="delegates-category col-md-6">
+            <span class="title">{{cat_del.category.title}}</span>
+          </div>
+          <div class="category-delegate col-md-6">
+            <span class="title">{{cat_del.delegate.title}}</span>
+          </div>
+          <p class="icon" style="font-size: 20px">Edit</p>
+        </div>
+      </a>
+    </div>
+  </ion-content>
+</ion-view>

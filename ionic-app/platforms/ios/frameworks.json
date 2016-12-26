@@ -1,0 +1,7 @@
+{
+    "AudioToolbox.framework": 1,
+    "MessageUI.framework": 1,
+    "CFNetwork.framework": 1,
+    "CoreLocation.framework": 1,
+    "iAd.framework": 1
+}
