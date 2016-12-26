@@ -19,12 +19,14 @@ Then, you're ready to build your develop version of the app using the following 
 #### Android
 
 ```
+ionic platform add android
 ionic run android
 ```
 
 #### iOS
 
 ```
+ionic platform add ios
 ionic run ios
 ```
 
