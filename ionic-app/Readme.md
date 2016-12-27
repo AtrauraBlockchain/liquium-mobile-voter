@@ -18,6 +18,7 @@ Then, you're ready to build your develop version of the app using the following 
 
 ```
 npm install
+bower install
 ionic state restore
 ```
 
