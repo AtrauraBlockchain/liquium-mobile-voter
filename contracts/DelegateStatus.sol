@@ -73,7 +73,12 @@ contract DelegateStatus is Owned {
 
 
     function setDelegate(address _voter, address _delegate) {
+
+        if (getDelegate(_voter) == _delegate) return;
+
         undelegate(_voter);
+
+        if (_delegate == 0) return;
 
         uint amount = getVotingPower(_voter);
 

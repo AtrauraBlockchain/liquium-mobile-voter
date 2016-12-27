@@ -23,7 +23,7 @@ import "DelegateStatus.sol";
 
 contract VoteAggregatorInterface {
 
-    function isValid(bytes _vote) constant returns(bool);
+    function isValid(bytes32 _vote) constant returns(bool);
     function deltaVote(int _amount, bytes32 _ballot) returns (bool _succes);
 
 }
@@ -31,30 +31,36 @@ contract VoteAggregatorInterface {
 
 contract OrganizationInterface {
 
-    function addPoll(
+
+// Interfce for organization owner
+      function addCategory(string _description, uint _parentCategory);
+      function removeCategory(uint _idCategory);
+
+      function addVoter(address _voter, uint _amount);
+      function removeVoter(address _voter, uint _amount);
+      function addPoll(
         string _description,
         uint _closeDelegateTime,
         uint _closeTime,
         uint _categoryId,
         address _agregatorAddr) returns (uint _idPoll);
 
-      function addVoter(address _voter, uint _amount);
-      function removeVoter(address _voter, uint _amount);
+
+// Interface for Final Voters
+      function vote(uint _idPoll, bytes32[] _ballots, uint[] _amounts);
+      function unvote(uint _idPoll);
+      function setDelegateSinglePoll(uint _idPoll, uint _delegate);
+      function setDelegates(uint[] _categoryIds, uint[] _delegates);
+
+/// Interface for delegates
 
       function addDelegate(string name) returns(uint _idDelegate);
       function removeDelegate(uint _idDelegate);
 
-      function addCategory(bytes32 _idCategory, string _description, address _parentCategory);
-      function removeCategory(uint _idCategory);
-
-      function vote(uint _idPoll, bytes32[] _ballots, uint[] _amounts);
-      function unvote(uint _idPoll);
-      function pollDelegate(uint _idPoll, address _delegate);
-      function updateDelegates(uint[] _categoryIds, uint[] _delegates);
-
-      function delegateVote(uint _idDelegate, uint _idPoll, bytes32[] _ballots, uint[] _amounts, string motivation);
-      function delegateUpdateDelegates(uint _idDelegate, uint[] _categoryIds, uint[] _delegates);
-
+      function dVote(uint _idDelegate, uint _idPoll, bytes32[] _ballots, uint[] _amounts, string motivation);
+      function dUnvote(uint _idDelegate, uint _idPoll);
+      function dSetDelegateSinglePoll(uint _idDelegate, uint _idPoll, uint _delegate);
+      function dSetDelegates(uint _idDelegate, uint[] _categoryIds, uint[] _delegates);
 }
 
 
@@ -112,6 +118,9 @@ contract Organization is OrganizationInterface, Owned {
 
     function Organization(address _delegateStatusFactory) {
         delegateStatusFactory = DelegateStatusFactory(_delegateStatusFactory);
+        categories.length = 1;
+        delegates.length =1;
+        polls.length = 1;
     }
 
 
@@ -145,7 +154,7 @@ contract Organization is OrganizationInterface, Owned {
         if (!doVote(p, msg.sender, _ballots, _amounts, "")) throw;
     }
 
-    function delegateVote(uint _idDelegate, uint _idPoll, bytes32[] _ballots, uint[] _amounts, string _motivation) {
+    function dVote(uint _idDelegate, uint _idPoll, bytes32[] _ballots, uint[] _amounts, string _motivation) {
         Delegate d = getDelegate(_idDelegate);
         if (d.owner != msg.sender) throw;
 
@@ -185,7 +194,7 @@ contract Organization is OrganizationInterface, Owned {
     }
 
     // Will allways throw.
-    function delegateUnvote(uint _idDelegate, uint _idPoll) {
+    function dUnvote(uint _idDelegate, uint _idPoll) {
         Delegate d = getDelegate(_idDelegate);
         if (d.owner != msg.sender) throw;
 
@@ -218,13 +227,13 @@ contract Organization is OrganizationInterface, Owned {
         }
     }
 
-    function pollDelegate(uint _idPoll, address _delegate) {
+    function setDelegateSinglePoll(uint _idPoll, uint _delegate) {
         Poll p = getPoll(_idPoll);
 
-        if (!doPollDelegate(p, msg.sender, _delegate)) throw;
+        if (!doSetDelegateSinglePoll(p, msg.sender, _delegate)) throw;
     }
 
-    function delegatePollDelegate(uint _idDelegate, uint _idPoll, address _delegate) {
+    function dSetDelegateSinglePoll(uint _idDelegate, uint _idPoll, uint _delegate) {
         Delegate d = getDelegate(_idDelegate);
         if (d.owner != msg.sender) throw;
 
@@ -232,55 +241,55 @@ contract Organization is OrganizationInterface, Owned {
 
         address voter = address(_idDelegate);
 
-        if (!doPollDelegate(p, voter, _delegate)) throw;
+        if (!doSetDelegateSinglePoll(p, voter, _delegate)) throw;
     }
 
-    function doPollDelegate(Poll storage _poll, address _voter, address _delegate) internal returns(bool _succes) {
+    function doSetDelegateSinglePoll(Poll storage _poll, address _voter, uint _delegate) internal returns(bool _succes) {
 
+        if (_delegate >= delegates.length) return false;
         if (! canVote(_poll, _voter) ) return false;
 
         doUnvote(_poll, _voter);
 
         int amount = int(_poll.delegateStatus.getVotingPower(_voter));
 
-        _poll.delegateStatus.setDelegate(_voter, _delegate);
+        _poll.delegateStatus.setDelegate(_voter, address(_delegate));
+
         var finalDelegate = _poll.delegateStatus.getFinalDelegate(_voter);
 
-        if (_poll.votes[finalDelegate].time != 0) {
+        if ((finalDelegate != 0) && (_poll.votes[finalDelegate].time != 0)) {
             deltaVote(_poll, finalDelegate, amount);
         }
     }
 
-
-
-    function updateDelegates(uint[] _categoryIds, uint[] _delegates) {
-        doUpdateDelegates(msg.sender, _categoryIds, _delegates);
+    function setDelegates(uint[] _categoryIds, uint[] _delegates) {
+        doSetDelegates(msg.sender, _categoryIds, _delegates);
     }
 
-    function delegateUpdateDelegates(uint _idDelegate, uint[] _categoryIds, uint[] _delegates) {
+    function dSetDelegates(uint _idDelegate, uint[] _categoryIds, uint[] _delegates) {
         Delegate d = getDelegate(_idDelegate);
         if (d.owner != msg.sender) throw;
 
         address voter = address(_idDelegate);
 
-        if (!doUpdateDelegates(voter, _categoryIds, _delegates)) throw;
+        if (!doSetDelegates(voter, _categoryIds, _delegates)) throw;
 
     }
 
-    function doUpdateDelegates(address _voter, uint[] _categoryIds, uint[] _delegates) returns (bool _success) {
+    function doSetDelegates(address _voter, uint[] _categoryIds, uint[] _delegates) returns (bool _success) {
         uint i;
         uint j;
         if (_categoryIds.length != _delegates.length) return false;
-        for (i=0; i<_categoryIds.length; i++) {
+        for (i=1; i<_categoryIds.length; i++) {
             Category c = getCategory(_categoryIds[i]);
-            address delegate = address(_delegates[i]);
-            if (!isDelegate(delegate)) return false;
-            c.delegateStatus.setDelegate(_voter,delegate);
+            uint delegate = _delegates[i];
+            if (!isDelegate(address(delegate))) return false;
+            c.delegateStatus.setDelegate(_voter,address(delegate));
             for (j=0; j<c.activePolls.length; j++) {
                 Poll p = polls[c.activePolls[i]];
                 if (now < p.closeTime ) {
                     if (!hasVoted(p, _voter)) {
-                        doPollDelegate(p, _voter, delegate);
+                        doSetDelegateSinglePoll(p, _voter, delegate);
                     }
                 } else {
                     c.activePolls[i] = c.activePolls[c.activePolls.length-1];
@@ -375,16 +384,19 @@ contract Organization is OrganizationInterface, Owned {
     }
 
     function getPoll(uint _idPoll) internal returns (Poll storage p) {
+        if (_idPoll == 0) throw;
         if (_idPoll >= polls.length) throw;
         p = polls[_idPoll];
     }
 
     function getCategory(uint _idCategory) internal returns (Category storage c) {
+        if (_idCategory == 0) throw;
         if (_idCategory >= categories.length) throw;
         c = categories[_idCategory];
     }
 
     function getDelegate(uint _idDelegate) internal returns (Delegate storage d) {
+        if (_idDelegate == 0) throw;
         if (_idDelegate >= delegates.length) throw;
         d = delegates[_idDelegate];
     }
@@ -395,7 +407,7 @@ contract Organization is OrganizationInterface, Owned {
         address delegate;
 
         balanceOf[_voter] += _amount;
-        for (i=0; i<categories.length; i++) {
+        for (i=1; i<categories.length; i++) {
             var c = categories[i];
             delegate = c.delegateStatus.getDelegate(_voter);
             if (delegate!=0) {
@@ -428,7 +440,7 @@ contract Organization is OrganizationInterface, Owned {
 
         if (_amount > balanceOf[_voter]) throw;
         balanceOf[_voter] -= _amount;
-        for (i=0; i<categories.length; i++) {
+        for (i=1; i<categories.length; i++) {
             var c = categories[i];
             delegate = c.delegateStatus.getDelegate(_voter);
             if (delegate!=0) {
@@ -467,10 +479,15 @@ contract Organization is OrganizationInterface, Owned {
         d.removed = true;
     }
 
-    function addCategory(bytes32 _idCategory, string _description, address _parentCategory) onlyOwner {
+    function addCategory(string _description, uint _parentCategory) onlyOwner {
         Category c = categories[categories.length++];
         c.description = _description;
-        c.delegateStatus = delegateStatusFactory.createDelegateStatus(_parentCategory);
+        if (_parentCategory > 0) {
+            Category p = getCategory(_parentCategory);
+            c.delegateStatus = delegateStatusFactory.createDelegateStatus(p.delegateStatus);
+        } else {
+            c.delegateStatus = delegateStatusFactory.createDelegateStatus(0);
+        }
     }
 
     function removeCategory(uint _idCategory) onlyOwner {
@@ -481,7 +498,6 @@ contract Organization is OrganizationInterface, Owned {
     function isDelegate(address _voter) internal returns(bool) {
         return (uint(_voter) < 0x1000000);
     }
-
 }
 
 
