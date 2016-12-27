@@ -35,7 +35,6 @@
   "cordovaPlugins": [
     "https://github.com/phonegap-build/PushPlugin.git",
     "com.ionic.keyboard",
-    "org.pushandplay.cordova.apprate",
     "https://github.com/katzer/cordova-plugin-email-composer.git",
     "cordova-plugin-extension",
     "cordova-plugin-console@^1.0.1",
@@ -43,10 +42,8 @@
     "cordova-plugin-dialogs@^1.1.1",
     "cordova-plugin-globalization@^1.0.1",
     "cordova-plugin-whitelist@1.0.0",
-    "cordova-plugin-admobpro",
     "com.rjfun.cordova.iad",
     "cordova-plugin-inappbrowser",
-    "nl.x-services.plugins.socialsharing",
     "com.synconset.imagepicker",
     "cordova-plugin-geolocation",
     "cordova-plugin-splashscreen"
