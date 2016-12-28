@@ -23,7 +23,7 @@ import "DelegateStatus.sol";
 
 contract VoteAggregatorInterface {
 
-    function isValid(bytes32 _vote) constant returns(bool);
+    function isValid(bytes32 _ballot) constant returns(bool);
     function deltaVote(int _amount, bytes32 _ballot) returns (bool _succes);
 
 }
@@ -112,7 +112,8 @@ contract Organization is OrganizationInterface, Owned {
 
     Delegate[] public delegates;
 
-    mapping(address => uint) public balanceOf;
+    mapping(address => uint) balances;
+    uint public totalSupply;
 
     DelegateStatusFactory delegateStatusFactory;
 
@@ -136,7 +137,8 @@ contract Organization is OrganizationInterface, Owned {
         if (now + MIN_TIME_FINAL_VOTING > _closeTime) throw;
         if (_closeTime < _closeDelegateTime + MIN_TIME_FINAL_VOTING) throw;
 
-        Poll p = polls[polls.length++];
+        uint idPoll = polls.length++;
+        Poll p = polls[idPoll];
         p.description = _description;
         p.closeDelegateTime = _closeDelegateTime;
         p.closeTime = _closeTime;
@@ -144,7 +146,9 @@ contract Organization is OrganizationInterface, Owned {
         p.agregator = VoteAggregatorInterface(_agregatorAddr);
         p.delegateStatus = delegateStatusFactory.createDelegateStatus(c.delegateStatus);
 
-        c.activePolls.push(polls.length-1);
+        c.activePolls.push(idPoll);
+
+        PollAdded(idPoll);
     }
 
 
@@ -164,6 +168,9 @@ contract Organization is OrganizationInterface, Owned {
 
         if (!doVote(p, address(_idDelegate), _ballots, _amounts, _motivation)) throw;
     }
+
+    int public test1;
+    bytes32 public test2;
 
     function doVote(Poll storage _poll, address _voter, bytes32[] _ballots, uint[] _amounts, string _motivation) internal returns (bool _succes) {
 
@@ -312,7 +319,7 @@ contract Organization is OrganizationInterface, Owned {
                 if (now > _poll.votes[finalDelegate].time + DELEGATE_MODIFICATION_TIME) return false;
             }
         } else {
-            if (_poll.delegateStatus.getVotingPower(msg.sender) == 0) return false;
+            if (_poll.delegateStatus.getVotingPower(_voter) == 0) return false;
         }
 
         return true;
@@ -355,6 +362,7 @@ contract Organization is OrganizationInterface, Owned {
         for (i=0; i<_ballots.length; i++) {
             total += _amounts[i];
         }
+
         if (total == 0) return;
         v.time = now;
         v.motivation = _motivation;
@@ -362,6 +370,8 @@ contract Organization is OrganizationInterface, Owned {
             v.ballots.push(_ballots[i]);
             v.amounts.push(_amounts[i]);
             a = int(_amounts[i] * _amount / total);
+            test1 = a;
+            test2 = _ballots[i];
             p.agregator.deltaVote(a, _ballots[i]);
         }
         v.total = _amount;
@@ -389,6 +399,10 @@ contract Organization is OrganizationInterface, Owned {
         p = polls[_idPoll];
     }
 
+    function nPolls() constant returns(uint) {
+        return polls.length-1;
+    }
+
     function getCategory(uint _idCategory) internal returns (Category storage c) {
         if (_idCategory == 0) throw;
         if (_idCategory >= categories.length) throw;
@@ -406,7 +420,8 @@ contract Organization is OrganizationInterface, Owned {
         uint j;
         address delegate;
 
-        balanceOf[_voter] += _amount;
+        balances[_voter] += _amount;
+        totalSupply += _amount;
         for (i=1; i<categories.length; i++) {
             var c = categories[i];
             delegate = c.delegateStatus.getDelegate(_voter);
@@ -438,8 +453,9 @@ contract Organization is OrganizationInterface, Owned {
         uint j;
         address delegate;
 
-        if (_amount > balanceOf[_voter]) throw;
-        balanceOf[_voter] -= _amount;
+        if (_amount > balances[_voter]) throw;
+        balances[_voter] -= _amount;
+        totalSupply -= _amount;
         for (i=1; i<categories.length; i++) {
             var c = categories[i];
             delegate = c.delegateStatus.getDelegate(_voter);
@@ -495,9 +511,20 @@ contract Organization is OrganizationInterface, Owned {
         c.deleted = true;
     }
 
+    function nCategories() constant returns (uint) {
+        return categories.length-1;
+    }
+
     function isDelegate(address _voter) internal returns(bool) {
         return (uint(_voter) < 0x1000000);
     }
+
+    function balanceOf(address _voter) constant returns(uint) {
+        return balances[_voter];
+    }
+// Events
+
+    event PollAdded(uint indexed idPoll);
 }
 
 

@@ -39,18 +39,17 @@ contract DelegateStatus is Owned {
     mapping (address => Checkpoint[]) votingPower;
     mapping (address => Checkpoint[]) delegate;
 
-    Token token;
     uint creationBlock;
     DelegateStatus parent;
 
-    function DelegateStatus(address _parentDelegateStatus, address _token) {
-        token = Token(_token);
+    function DelegateStatus(address _parentDelegateStatus, address _owner) {
+        owner = _owner;
         parent = DelegateStatus(_parentDelegateStatus);
         creationBlock = block.number;
     }
 
     function getVotingPower(address _voter) constant returns(uint) {
-        getVotingPowerAt(_voter, block.number);
+        return getVotingPowerAt(_voter, block.number);
     }
 
     function getVotingPowerAt(address _voter, uint _block) constant returns(uint) {
@@ -67,7 +66,7 @@ contract DelegateStatus is Owned {
             }
             return getValueAt(votingPower[_voter], _block);
         } else {
-            return token.balanceOf(_voter);
+            return Token(owner).balanceOf(_voter);
         }
     }
 
