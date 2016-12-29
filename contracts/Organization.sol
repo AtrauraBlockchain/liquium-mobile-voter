@@ -61,6 +61,18 @@ contract OrganizationInterface {
       function dUnvote(uint _idDelegate, uint _idPoll);
       function dSetDelegateSinglePoll(uint _idDelegate, uint _idPoll, uint _delegate);
       function dSetDelegates(uint _idDelegate, uint[] _categoryIds, uint[] _delegates);
+
+// Query for votes
+    function getVoteInfo(uint _idPoll, address _voter) constant returns(uint _time, uint _total, uint _nBallots);
+    function getBallotInfo(uint _idPoll, address _voter, uint _idx) constant returns(bytes32 _ballot, uint _amount);
+    function dGetVoteInfo(uint _idPoll, uint _idDelegate) constant returns(uint _time, uint _total, uint _nBallots, string _motivation);
+    function dGetBallotInfo(uint _idPoll, uint _idDelegate, uint _idx) constant returns(bytes32 _ballot, uint _amount);
+
+// Query delegate
+    function getPollDelegate(uint _idPoll, address _voter) constant returns (uint _idDelegate);
+    function getCategoryDelegate(uint _idCategory, address _voter) constant returns (uint _idDelegate);
+    function dGetPollDelegaet(uint _idPoll, uint _idDelegate) constant returns (uint _idDelegateDelegate);
+    function dGetCategoryDelegate(uint _idCategory, uint _idDelegate) constant returns (uint _idDelegateDelegate);
 }
 
 
@@ -232,6 +244,8 @@ contract Organization is OrganizationInterface, Owned {
                 deltaVote(_poll, finalDelegate, int(amount));
             }
         }
+
+        return true;
     }
 
     function setDelegateSinglePoll(uint _idPoll, uint _delegate) {
@@ -522,6 +536,69 @@ contract Organization is OrganizationInterface, Owned {
     function balanceOf(address _voter) constant returns(uint) {
         return balances[_voter];
     }
+
+
+    function getVoteInfo(uint _idPoll, address _voter) constant returns(uint _time, uint _total, uint _nBallots) {
+        Poll p = getPoll(_idPoll);
+        _time = p.votes[_voter].time;
+        _total = p.votes[_voter].total;
+        _nBallots = p.votes[_voter].ballots.length;
+    }
+
+    function getBallotInfo(uint _idPoll, address _voter, uint _idx) constant returns(bytes32 _ballot, uint _amount) {
+        Poll p = getPoll(_idPoll);
+        _ballot = p.votes[_voter].ballots[_idx];
+        _amount = p.votes[_voter].amounts[_idx];
+    }
+
+    function dGetVoteInfo(uint _idPoll, uint _idDelegate) constant returns(uint _time, uint _total, uint _nBallots, string _motivation) {
+        Delegate d = getDelegate(_idDelegate);
+        address voter = address(_idDelegate);
+
+        Poll p = getPoll(_idPoll);
+        _time = p.votes[voter].time;
+        _total = p.votes[voter].total;
+        _nBallots = p.votes[voter].ballots.length;
+        _motivation = p.votes[voter].motivation;
+    }
+
+    function dGetBallotInfo(uint _idPoll, uint _idDelegate, uint _idx) constant returns(bytes32 _ballot, uint _amount) {
+        Delegate d = getDelegate(_idDelegate);
+        address voter = address(_idDelegate);
+
+        Poll p = getPoll(_idPoll);
+        _ballot = p.votes[voter].ballots[_idx];
+        _amount = p.votes[voter].amounts[_idx];
+    }
+
+
+    function getPollDelegate(uint _idPoll, address _voter) constant returns (uint _idDelegate) {
+        Poll p = getPoll(_idPoll);
+        return uint(p.delegateStatus.getDelegate(_voter));
+    }
+
+    function getCategoryDelegate(uint _idCategory, address _voter) constant returns (uint _idDelegate) {
+        Category c = getCategory(_idCategory);
+        return uint(c.delegateStatus.getDelegate(_voter));
+    }
+
+    function dGetPollDelegaet(uint _idPoll, uint _idDelegate) constant returns (uint _idDelegateDelegate) {
+        Delegate d = getDelegate(_idDelegate);
+        address voter = address(_idDelegate);
+
+        Poll p = getPoll(_idPoll);
+        return uint(p.delegateStatus.getDelegate(voter));
+    }
+
+    function dGetCategoryDelegate(uint _idCategory, uint _idDelegate) constant returns (uint _idDelegateDelegate) {
+        Delegate d = getDelegate(_idDelegate);
+        address voter = address(_idDelegate);
+
+        Category c = getCategory(_idCategory);
+        return uint(c.delegateStatus.getDelegate(voter));
+    }
+
+
 // Events
 
     event PollAdded(uint indexed idPoll);

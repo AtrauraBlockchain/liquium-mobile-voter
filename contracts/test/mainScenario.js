@@ -30,6 +30,7 @@ describe('Normal Scenario Liquium test', function(){
     var delegateStatus;
     var compilationResult;
     var ballots = [];
+    var now = Math.floor(new Date().getTime() /1000);
 
     before(function(done) {
 //        ethConnector.init('rpc', function(err) {
@@ -94,7 +95,6 @@ describe('Normal Scenario Liquium test', function(){
     });
     it('Should create a Poll', function(done) {
         this.timeout(200000000);
-        var now = Math.floor(new Date().getTime() /1000);
         var closeDelegateTime = now + 86400*7;
         var closeTime = now + 86400*14;
         liquiumHelper.deploySingleChoice(organization, {
@@ -201,20 +201,62 @@ describe('Normal Scenario Liquium test', function(){
         ], done);
     });
     it('Should vote', function(done) {
+        this.timeout(200000000);
         organization.vote(idPoll, [ballots[1]], [web3.toWei(1)], {from: voter1, gas: 2000000}, function(err) {
+            assert.ifError(err);
+            async.series([
+                function(cb) {
+                    singleChoice.result(1, function(err, res) {
+                        if (err) return cb(err);
+                        assert.equal(web3.fromWei(res).toNumber(), 1);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.getVoteInfo(idPoll, voter1, function(err,res) {
+                        if (err) return cb(err);
+                        assert(res[0] > now);
+                        assert.equal(web3.fromWei(res[1]).toNumber(), 1);
+                        assert.equal(res[2], 1);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.getBallotInfo(idPoll, voter1, 0, function(err,res) {
+                        if (err) return cb(err);
+                        assert.equal(res[0], ballots[1]);
+                        assert.equal(web3.fromWei(res[1]).toNumber(), 1);
+                        cb();
+                    });
+                }
+            ], done);
+        });
+    });
+    it('Should unvote', function(done) {
+        this.timeout(200000000);
+        organization.unvote(idPoll, {from: voter1, gas: 2000000}, function(err) {
             assert.ifError(err);
             async.series([
                 printTests,
                 function(cb) {
                     singleChoice.result(1, function(err, res) {
                         if (err) return cb(err);
-                        log(res);
-                        assert(web3.fromWei(res).toNumber(), 1);
+                        assert.equal(web3.fromWei(res).toNumber(), 0);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.getVoteInfo(idPoll, voter1, function(err,res) {
+                        if (err) return cb(err);
+                        assert.equal(res[0], 0);
+                        assert.equal(web3.fromWei(res[1]).toNumber(), 0);
+                        assert.equal(res[2], 0);
                         cb();
                     });
                 }
             ], done);
         });
+
     });
 
     function bcDelay(secs, cb) {
