@@ -237,7 +237,6 @@ describe('Normal Scenario Liquium test', function(){
         organization.unvote(idPoll, {from: voter1, gas: 2000000}, function(err) {
             assert.ifError(err);
             async.series([
-                printTests,
                 function(cb) {
                     singleChoice.result(1, function(err, res) {
                         if (err) return cb(err);
@@ -256,9 +255,159 @@ describe('Normal Scenario Liquium test', function(){
                 }
             ], done);
         });
-
     });
-
+    it('Should create a delegate', function(done) {
+        this.timeout(200000000);
+        organization.addDelegate("Delegate1", {from: delegate1, gas: 300000}, function(err, res) {
+            assert.ifError(err);
+            async.series([
+                function(cb) {
+                    organization.delegates(1, function(err, res) {
+                        if (err) return cb(err);
+                        assert.equal(res[0], "Delegate1");
+                        assert.equal(res[1], delegate1);
+                        assert.equal(res[2], false);
+                        cb();
+                    });
+                }
+            ], done);
+        });
+    });
+    it('Should The delegate setup the vote', function(done) {
+        this.timeout(200000000);
+        organization.dVote(1, idPoll, [ballots[1]], [web3.toWei(1)], "Motivation1", {from: delegate1, gas: 2000000}, function(err) {
+            assert.ifError(err);
+            async.series([
+                function(cb) {
+                    singleChoice.result(1, function(err, res) {
+                        if (err) return cb(err);
+                        assert.equal(web3.fromWei(res).toNumber(), 0);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.dGetVoteInfo(idPoll, 1, function(err,res) {
+                        if (err) return cb(err);
+                        assert(res[0] > now);
+                        assert.equal(web3.fromWei(res[1]).toNumber(), 0);
+                        assert.equal(res[2], 1);
+                        assert.equal(res[3], "Motivation1");
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.dGetBallotInfo(idPoll, 1, 0, function(err,res) {
+                        if (err) return cb(err);
+                        assert.equal(res[0], ballots[1]);
+                        assert.equal(web3.fromWei(res[1]).toNumber(), 1);
+                        cb();
+                    });
+                }
+            ], done);
+        });
+    });
+    it('Should delegate voter1 in delegate1 for category 1', function(done) {
+        this.timeout(200000000);
+        organization.setDelegates([1], [1], {from: voter1, gas: 1000000}, function(err, res) {
+            assert.ifError(err);
+            async.series([
+                function(cb) {
+                    organization.getCategoryDelegate(1, voter1, function(err, res) {
+                        if (err) return cb(err);
+                        assert.equal(res, 1);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.getPollDelegate(idPoll, voter1, function(err, res) {
+                        if (err) return cb(err);
+                        assert.equal(res, 1);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    singleChoice.result(1, function(err, res) {
+                        if (err) return cb(err);
+                        assert.equal(web3.fromWei(res).toNumber(), 1);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.dGetVoteInfo(idPoll, 1, function(err,res) {
+                        if (err) return cb(err);
+                        assert(res[0] > now);
+                        assert.equal(web3.fromWei(res[1]).toNumber(), 1);
+                        assert.equal(res[2], 1);
+                        assert.equal(res[3], "Motivation1");
+                        cb();
+                    });
+                }
+            ], done);
+        });
+    });
+    it('Should voter should change delegate vote', function(done) {
+        this.timeout(200000000);
+        organization.vote(idPoll, [ballots[2]], [web3.toWei(1)], {from: voter1, gas: 2000000}, function(err) {
+            assert.ifError(err);
+            async.series([
+                function(cb) {
+                    singleChoice.result(1, function(err, res) {
+                        if (err) return cb(err);
+                        assert.equal(web3.fromWei(res).toNumber(), 0);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    singleChoice.result(2, function(err, res) {
+                        if (err) return cb(err);
+                        assert.equal(web3.fromWei(res).toNumber(), 1);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.getCategoryDelegate(1, voter1, function(err, res) {
+                        if (err) return cb(err);
+                        assert.equal(res, 1);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.getPollDelegate(idPoll, voter1, function(err, res) {
+                        if (err) return cb(err);
+                        assert.equal(res, 0);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.getVoteInfo(idPoll, voter1, function(err,res) {
+                        if (err) return cb(err);
+                        assert(res[0] > now);
+                        assert.equal(web3.fromWei(res[1]).toNumber(), 1);
+                        assert.equal(res[2], 1);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.getBallotInfo(idPoll, voter1, 0, function(err,res) {
+                        if (err) return cb(err);
+                        assert.equal(res[0], ballots[2]);
+                        assert.equal(web3.fromWei(res[1]).toNumber(), 1);
+                        cb();
+                    });
+                },
+                function(cb) {
+                    organization.dGetVoteInfo(idPoll, 1, function(err,res) {
+                        if (err) return cb(err);
+                        assert(res[0] > now);
+                        assert.equal(web3.fromWei(res[1]).toNumber(), 0);
+                        assert.equal(res[2], 1);
+                        assert.equal(res[3], "Motivation1");
+                        cb();
+                    });
+                }
+            ], done);
+        });
+    });
     function bcDelay(secs, cb) {
         send("evm_increaseTime", [secs], function(err, result) {
             if (err) return cb(err);

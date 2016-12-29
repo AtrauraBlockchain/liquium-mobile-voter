@@ -230,7 +230,7 @@ contract Organization is OrganizationInterface, Owned {
         uint amount = _poll.delegateStatus.getVotingPower(_voter);
 
         if (hasVoted(_poll, _voter)) {
-            setVote(_poll, _voter, new bytes32[](0), new uint[](0), amount, "");
+            setVote(_poll, _voter, new bytes32[](0), new uint[](0), 0, "");
         }
 
         Category c = categories[_poll.idCategory];
@@ -270,9 +270,11 @@ contract Organization is OrganizationInterface, Owned {
         if (_delegate >= delegates.length) return false;
         if (! canVote(_poll, _voter) ) return false;
 
-        doUnvote(_poll, _voter);
-
         int amount = int(_poll.delegateStatus.getVotingPower(_voter));
+
+        if (hasVoted(_poll, _voter)) {
+            setVote(_poll, _voter, new bytes32[](0), new uint[](0), 0, "");
+        }
 
         _poll.delegateStatus.setDelegate(_voter, address(_delegate));
 
@@ -281,10 +283,12 @@ contract Organization is OrganizationInterface, Owned {
         if ((finalDelegate != 0) && (_poll.votes[finalDelegate].time != 0)) {
             deltaVote(_poll, finalDelegate, amount);
         }
+
+        return true;
     }
 
     function setDelegates(uint[] _categoryIds, uint[] _delegates) {
-        doSetDelegates(msg.sender, _categoryIds, _delegates);
+        if (!doSetDelegates(msg.sender, _categoryIds, _delegates)) throw;
     }
 
     function dSetDelegates(uint _idDelegate, uint[] _categoryIds, uint[] _delegates) {
@@ -301,7 +305,7 @@ contract Organization is OrganizationInterface, Owned {
         uint i;
         uint j;
         if (_categoryIds.length != _delegates.length) return false;
-        for (i=1; i<_categoryIds.length; i++) {
+        for (i=0; i<_categoryIds.length; i++) {
             Category c = getCategory(_categoryIds[i]);
             uint delegate = _delegates[i];
             if (!isDelegate(address(delegate))) return false;
@@ -319,6 +323,7 @@ contract Organization is OrganizationInterface, Owned {
                 }
             }
         }
+        return true;
     }
 
 
@@ -352,7 +357,7 @@ contract Organization is OrganizationInterface, Owned {
         int a;
         uint total;
 
-        Vote v = p.votes[msg.sender];
+        Vote v = p.votes[_voter];
 
         total = 0;
         for (i=0; i<v.ballots.length; i++) {
@@ -384,8 +389,6 @@ contract Organization is OrganizationInterface, Owned {
             v.ballots.push(_ballots[i]);
             v.amounts.push(_amounts[i]);
             a = int(_amounts[i] * _amount / total);
-            test1 = a;
-            test2 = _ballots[i];
             p.agregator.deltaVote(a, _ballots[i]);
         }
         v.total = _amount;
@@ -393,7 +396,7 @@ contract Organization is OrganizationInterface, Owned {
 
     function deltaVote(Poll storage p, address _voter, int _amount) internal {
         uint i;
-        Vote v = p.votes[msg.sender];
+        Vote v = p.votes[_voter];
         uint total = 0;
         if (_amount == 0) return;
         for (i=0; i<v.ballots.length; i++) {
@@ -496,14 +499,14 @@ contract Organization is OrganizationInterface, Owned {
         }
     }
 
-    function addDelegate(string _name) onlyOwner returns(uint _idDelegate) {
+    function addDelegate(string _name) returns(uint _idDelegate) {
         Delegate d = delegates[delegates.length++];
         d.name = _name;
         d.owner = msg.sender;
         return delegates.length -1;
     }
 
-    function removeDelegate(uint _idDelegate) onlyOwner{
+    function removeDelegate(uint _idDelegate) {
         Delegate d = getDelegate(_idDelegate);
         if (d.owner != msg.sender) throw;
         d.removed = true;
