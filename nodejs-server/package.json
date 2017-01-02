@@ -1,0 +1,19 @@
+{
+  "name": "liquium-nodeserver",
+  "version": "0.0.1",
+  "description": "Node server for liquium",
+  "main": "nodeserver.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "liquium",
+    "liquid",
+    "democracy"
+  ],
+  "author": "Atraura Blockchain",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "ethconnector": "0.0.20"
+  }
+}
