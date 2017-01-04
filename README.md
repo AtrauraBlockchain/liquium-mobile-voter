@@ -1,6 +1,12 @@
-# Ionic App for the voters
+# Liquim Mobile
 
 [![node](http://img.shields.io/badge/node-6.3.1-brightgreen.svg)]()
+
+Liquium is an Open Source polling framework based in Smart Contracts running in the Ethereum network which allows to perform liquid democracy.
+
+We've built a template for organizations which want to integrate a public, fair and transparent polling system, so they can modify it for their own context just forking this and its brother repositories.
+
+# Ionic App for the voters
 
 This will be the app used by the voters to vote and delegate their vote (if needed). This mobile app is multiplatform, which means that can be built and run in both Android and iOS.
 
