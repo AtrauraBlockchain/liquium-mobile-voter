@@ -1,18 +1,18 @@
 <ion-view class="category-polls-view">
   <ion-nav-title>
-    <span>Poll feed</span>
+    <span>Poll Feed</span>
   </ion-nav-title>
   <ion-content>
     <div class="list category-polls">
-      <a ng-repeat="poll in polls" class="item item-icon-right" ui-sref="app.poll({pollId: (poll.title | slugify)})">
+      <a ng-repeat="poll in polls" class="item item-icon-right" ui-sref="app.poll({pollId: poll.idPoll})">
         <div class="thumbnail-outer">
           <pre-img ratio="_1_1" helper-class="">
-            <img class="thumbnail" ng-src="{{poll.image}}" spinner-on-load>
+            <img class="thumbnail" ng-src="img/logo.png" spinner-on-load>
           </pre-img>
         </div>
         <div>
           <span class="title">{{poll.title}}</span>
-          <p class="description">{{poll.description}}</p>
+          <p class="description">{{poll.question}}</p>
         </div>
         <i class="icon ion-arrow-right-c"></i>
       </a>

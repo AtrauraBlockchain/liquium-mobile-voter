@@ -8,8 +8,8 @@
   <ion-content>
     <div class="row categories-list">
       <div ng-repeat="category in poll_categories" class="col col-50">
-        <a class="poll-category" ui-sref="app.category-polls({category: (category.id | slugify)})" style="background-color: {{ category.color }}">
-          <span class="category-title">{{category.title}}</span>
+        <a class="poll-category" ui-sref="app.category-polls({category: (category.idCategory)})" style="background-color: green">
+          <span class="category-title">{{category.name}}</span>
         </a>
       </div>
     </div>

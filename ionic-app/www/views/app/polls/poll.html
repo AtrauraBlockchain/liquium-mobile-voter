@@ -9,17 +9,17 @@
         <div class="poll-heading item item-text-wrap">
           <h2 class="poll-title" ng-bind-html="poll.title | rawHtml"></h2>
           <p class="poll-date">
-            Published <span>{{ poll.published_date | parseDate | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}</span>
+            <b>Poll open until</b> <span>{{ poll.closeTime | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}</span>
           </p>
           <p class="poll-date">
-            Poll open until <span>{{ poll.due_date | parseDate | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}</span>
+            <b>Close for delegates:</b> <span>{{ poll.closeDelegateTime | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}</span>
           </p>
         </div>
         <div class="poll-content item item-text-wrap">
-          <p class="poll-excerpt">{{ poll.description }}</p>
+          <p class="poll-excerpt">{{ poll.question }}</p>
           <div class="poll-actions">
             <div ng-repeat="option in poll.options" class="item item-icon-right">
-              <ion-radio ng-model="$parent.choice" ng-value="{{ option.id }}" required>{{ option.text }}</ion-radio>
+              <ion-radio ng-model="$parent.choice" ng-value="{{ option.ballot }}" required>{{ option.answer }}</ion-radio>
             </div>
             <div class="vote col col-center" dynamic-anchor-fix>
               <button class="button button-positive button-small button-block button-assertive" ng-click="vote(choice)">

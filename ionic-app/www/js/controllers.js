@@ -10,8 +10,8 @@ angular.module('liquium.controllers', [])
 .controller('PollsCategoriesCtrl', function($scope, $http) {
 	$scope.poll_categories = [];
 
-	$http.get('views/app/example-jsons/poll-categories.json').then(function(response) {
-		$scope.poll_categories = response.data;
+	$http.get('http://localhost:8080/api/organization/0x5b1869d9a4c187f2eaa108f3062412ecf0526b24').then(function(response) {
+		$scope.poll_categories = response.data.categories;
 	});
 })
 
@@ -20,7 +20,7 @@ angular.module('liquium.controllers', [])
 	$scope.category_polls = [];
 
 	$scope.category = $stateParams.category;
-	$http.get('views/app/example-jsons/poll-categories.json').then(function(response) {
+	$http.get('http://localhost:8080/api/organization/0x5b1869d9a4c187f2eaa108f3062412ecf0526b24').then(function(response) {
 		var category = _.find(response.data, {id: $scope.category});
 		$scope.categoryTitle = category.title;
 		$scope.category_polls = category.polls;
@@ -62,9 +62,11 @@ angular.module('liquium.controllers', [])
 .controller('PollsListCtrl', function($scope, $http, $stateParams) {
 	$scope.polls = [];
 
-	$http.get('views/app/example-jsons/poll-list.json').then(function(response) {
-		for (var poll in response.data) {
-		  $scope.polls.push(response.data[poll]);
+	$http.get('http://localhost:8080/api/organization/0x5b1869d9a4c187f2eaa108f3062412ecf0526b24').then(function(response) {
+		var respJson = response.data;
+		//console.log(respJson);
+		for (var poll in respJson.polls) {
+		  $scope.polls.push(respJson.polls[poll]);
 		}
 	});
 })
@@ -79,9 +81,10 @@ angular.module('liquium.controllers', [])
 		template: 'Loading poll...'
 	});
 
-	$http.get('views/app/example-jsons/poll.json').then(function(response) {
+	$http.get('http://localhost:8080/api/organization/0x5b1869d9a4c187f2eaa108f3062412ecf0526b24').then(function(response) {
 
-		$scope.poll = response.data;
+		var respJson = response.data;
+		$scope.poll = respJson.polls[pollId];
 
 		$ionicLoading.hide();
 	});
@@ -100,8 +103,8 @@ angular.module('liquium.controllers', [])
 .controller('DelegatesCtrl', function($scope, $http, $stateParams) {
 	$scope.categories_delegates = [];
 
-	$http.get('views/app/example-jsons/categories_delegates.json').then(function(response) {
-			$scope.categories_delegates = response.data;
+	$http.get('http://localhost:8080/api/organization/0x5b1869d9a4c187f2eaa108f3062412ecf0526b24').then(function(response) {
+			$scope.categories_delegates = response.data.delegates;
 	});
 })
 ;
