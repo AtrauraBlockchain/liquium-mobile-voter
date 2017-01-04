@@ -12,29 +12,9 @@ This app let's the voter do the following things:
 - Undelegate his vote.
 
 ### Test and build your own Liquium Voter App
-First of all you have to install [Ionic](https://ionicframework.com/getting-started/) in your computer.
 
-Then, you're ready to build your develop version of the app using the following commands:
-
-```
-npm install
-bower update
-ionic state restore
-```
-
-#### Android
-
-```
-ionic platform add android
-ionic run android
-```
-
-#### iOS
-
-```
-ionic platform add ios
-ionic run ios
-```
+You can find a tutorial about how to [Test and build your own Liquium Voter App](https://github.com/AtrauraBlockchain/liquium-mobile/wiki/Test-and-build-your-own-Liquium-Voter-App) in our [wiki](https://github.com/AtrauraBlockchain/liquium-mobile/wiki/Test-and-build-your-own-Liquium-Voter-App).
 
 ### Publishing your app
+
 When you've customized the app to work exactly how your organization wants, you only have to publish the app at the official stores following this [tutorial](https://ionicframework.com/docs/guide/publishing.html).
