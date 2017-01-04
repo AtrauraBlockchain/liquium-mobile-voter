@@ -1,4 +1,7 @@
 # Ionic App for the voters
+
+[![node](http://img.shields.io/badge/node-6.3.1-brightgreen.svg)]()
+
 This will be the app used by the voters to vote and delegate their vote (if needed). This mobile app is multiplatform, which means that can be built and run in both Android and iOS.
 
 When you deploy your polling system, you need a nice and smooth interface easy to use by everyone, so we've developed this Ionic App for you. This app can create Ethereum accounts and sign Ethereum transactions to send them to our Node.JS Ethereum endpoint server, which will broadcast them to the network, avoiding to have an Ethereum node in every device, but without losing security.
