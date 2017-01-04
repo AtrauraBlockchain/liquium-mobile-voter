@@ -1,29 +1,40 @@
-# Liquium
-### Liquid democracy using the Ethereum Blockchain
-Liquium is an Open Source polling framework based in Smart Contracts running in the Ethereum network which allows to perform liquid democracy.
+# Ionic App for the voters
+This will be the app used by the voters to vote and delegate their vote (if needed). This mobile app is multiplatform, which means that can be built and run in both Android and iOS.
 
-We've build a template for organizations which want to integrate a *public*, *fair* and *transparent* polling system, so they can modify it for their own context just forking this repository.
+When you deploy your polling system, you need a nice and smooth interface easy to use by everyone, so we've developed this Ionic App for you. This app can create Ethereum accounts and sign Ethereum transactions to send them to our Node.JS Ethereum endpoint server, which will broadcast them to the network, avoiding to have an Ethereum node in every device, but without losing security.
 
-### What is liquid democracy?
-Delegative democracy, also known as liquid democracy, is a form of democratic control whereby an electorate vests voting power in delegates rather than in representatives. The term is a generic description of either already-existing or proposed popular-control apparatuses.
+### Features
+This app let's the voter do the following things:
+- Display polls in a list (active and past).
+- Display polls by categories (active and past).
+- Vote in a poll.
+- Delegate his vote to a delegate in a specific category.
+- Undelegate his vote.
 
-You can read more about liquid democracy at [Wikipedia](https://en.wikipedia.org/wiki/Delegative_democracy).
+### Test and build your own Liquium Voter App
+First of all you have to install [Ionic](https://ionicframework.com/getting-started/) in your computer.
 
-There's also a really good video by [Jakob Jochmann](http://lab.jochmann.me) in [Youtube](https://www.youtube.com/watch?v=fg0_Vhldz-8) which explains this concept really well.
+Then, you're ready to build your develop version of the app using the following commands:
 
-### What is Ethereum?
-Ethereum is an open source public blockchain-based distributed computing platform, featuring smart contract functionality. It provides a decentralized virtual machine, the Ethereum Virtual Machine (EVM), that can execute peer-to-peer contracts using a token called ether.
+```
+npm install
+bower update
+ionic state restore
+```
 
-You can read more about Ethereum at [Wikipedia](https://en.wikipedia.org/wiki/Ethereum) and at the official Ethereum [webpage](https://ethereum.org/).
+#### Android
 
-### Which elements form Liquium?
-Liquium is formed by 4 key elements:
-- Ethereum Smart Contracts.
-- Ionic App for Voters.
-- Ionic App for Delegates.
-- Node.js as an Ethereum endpoint.
+```
+ionic platform add android
+ionic run android
+```
 
-If you need more information about them, we include a README.md for every one of this components.
+#### iOS
 
-### Can I give a try?
-Of course you can! We'll upload some tutorials on how to set your own polling system soon.
+```
+ionic platform add ios
+ionic run ios
+```
+
+### Publishing your app
+When you've customized the app to work exactly how your organization wants, you only have to publish the app at the official stores following this [tutorial](https://ionicframework.com/docs/guide/publishing.html).
