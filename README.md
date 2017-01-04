@@ -27,3 +27,6 @@ You can find a tutorial about how to [Test and build your own Liquium Voter App]
 ### Publishing your app
 
 When you've customized the app to work exactly how your organization wants, you only have to publish the app at the official stores following this [tutorial](https://ionicframework.com/docs/guide/publishing.html).
+
+![banner](https://s30.postimg.org/rd8670hi9/Pasted_image_at_2017_01_03_04_52_PM_1.png)
+
