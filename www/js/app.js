@@ -8,14 +8,14 @@ angular.module('underscore', [])
 angular.module('ApiURL', [])
 .factory('ApiURL', function() {
     return {
-        url : "http://localhost:3000"
+        url : "http://liquium.solucionesblockchain.com"
     };
 });
 
 angular.module('ContractAddress', [])
 .factory('ContractAddress', function() {
     return {
-        address : "0x5b1869d9a4c187f2eaa108f3062412ecf0526b24"
+        address : "0x30861e0fa53f5d9d3fea736439817047412d1aca"
     };
 });
 
