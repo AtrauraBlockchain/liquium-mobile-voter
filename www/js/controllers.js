@@ -67,7 +67,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 .controller('PollsListCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
 	$scope.polls = [];
 
-	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
+	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address + "?voter=" + liquiumMobileLib.account).then(function(response) {
 		var respJson = response.data;
 		//console.log(respJson);
 		for (var poll in respJson.polls) {
@@ -87,10 +87,21 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 		template: 'Loading poll...'
 	});
 
-	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
+	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address + "?voter=" + liquiumMobileLib.account).then(function(response) {
 
 		respJson = response.data;
 		$scope.poll = respJson.polls[pollId];
+
+		$scope.hasVoted = false;
+		totalVoted = 0;
+		for (ballotId in respJson.polls[pollId].vote.ballots) {
+			totalVoted += respJson.polls[pollId].vote.ballots[ballotId].amount;
+			if (respJson.polls[pollId].vote.ballots[ballotId].amount == 100)
+				$scope.votedOption = respJson.polls[pollId].options[ballotId].answer;
+		}
+		if (totalVoted == 100)
+			$scope.hasVoted = true
+
 
 		$ionicLoading.hide();
 	});
@@ -99,11 +110,9 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 		$ionicLoading.show({
 			template: 'Sending transaction...'
 		});
-		console.log([choice]);
 		liquiumMobileLib.vote(ContractAddress.address, pollId, [choice], [web3.toWei(1)], function (err, txHash){
 			if(err){
 				$ionicLoading.hide();
-				console.log(err);
  				// An alert dialog
  				$scope.showAlert = function() {
    					var alertPopup = $ionicPopup.alert({

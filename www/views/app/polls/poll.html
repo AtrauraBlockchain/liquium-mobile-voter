@@ -17,14 +17,20 @@
         </div>
         <div class="poll-content item item-text-wrap">
           <p class="poll-excerpt">{{ poll.question }}</p>
-          <form class="poll-actions" name="form" ng-submit="vote(choice)" novalidate="">
-            <div ng-repeat="option in poll.options" class="item item-icon-right">
-              <ion-radio ng-model="$parent.choice" ng-value="option.ballot" required>{{ option.answer }}</ion-radio>
-            </div>
-            <div class="vote col col-center" dynamic-anchor-fix>
-              <input type="submit" class="button button-positive button-small button-block button-assertive" value="Vote"/>
-            </div>
-          </form>
+            <form class="poll-actions" name="form" ng-submit="vote(choice)" novalidate="">
+              <div ng-repeat="option in poll.options" class="item item-icon-right">
+                <ion-radio ng-model="$parent.choice" ng-value="option.ballot" required>{{ option.answer }} ({{option.result}})</ion-radio>
+              </div>
+              <div ng-if="!hasVoted">
+                <div class="vote col col-center" dynamic-anchor-fix>
+                  <input type="submit" class="button button-positive button-small button-block button-assertive" value="Vote"/>
+                </div>
+              </div>
+              <div ng-if="hasVoted" id="hasVoted">
+                <h3 style="margin-top: 10px">You have already voted with option "{{ votedOption }}"</h3>
+              <div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
