@@ -99,9 +99,8 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 		$ionicLoading.show({
 			template: 'Sending transaction...'
 		});
-		console.log(choice);
-
-		liquiumMobileLib.vote(ContractAddress.address, pollId, [choice.ballot], [web3.toWei(1)], function (err, txHash){
+		console.log([choice]);
+		liquiumMobileLib.vote(ContractAddress.address, pollId, [choice], [web3.toWei(1)], function (err, txHash){
 			if(err){
 				$ionicLoading.hide();
 				console.log(err);
@@ -115,7 +114,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 				//error handling
 			} else {
 				$ionicLoading.hide();
-				console.log('voted ok with ballot ' + choice.ballot);
+				console.log('voted ok with txHash: ' + txHash);
 				//message?
 			}
 		});
