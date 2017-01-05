@@ -19,7 +19,7 @@
           <p class="poll-excerpt">{{ poll.question }}</p>
           <div class="poll-actions">
             <div ng-repeat="option in poll.options" class="item item-icon-right">
-              <ion-radio ng-model="$parent.choice" ng-value="{{ option.ballot }}" required>{{ option.answer }}</ion-radio>
+              <ion-radio ng-model="$parent.choice" ng-value="{{ option }}" required>{{ option.answer }}</ion-radio>
             </div>
             <div class="vote col col-center" dynamic-anchor-fix>
               <button class="button button-positive button-small button-block button-assertive" ng-click="vote(choice)">
