@@ -80,6 +80,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 .controller('PollCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, ApiURL, ContractAddress) {
 
 	var pollId = $stateParams.pollId;
+	var respJson;
 	$scope.choice = -1;
 
 	$ionicLoading.show({
@@ -88,7 +89,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 
 	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
 
-		var respJson = response.data;
+		respJson = response.data;
 		$scope.poll = respJson.polls[pollId];
 
 		$ionicLoading.hide();
@@ -98,10 +99,26 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 		$ionicLoading.show({
 			template: 'Sending transaction...'
 		});
-		setTimeout(function(){
-			$ionicLoading.hide();
-			$state.go('app.polls-list');
-		}, 2000);
+		console.log(choice);
+
+		liquiumMobileLib.vote(ContractAddress.address, pollId, [choice.ballot], [web3.toWei(1)], function (err, txHash){
+			if(err){
+				$ionicLoading.hide();
+				console.log(err);
+ 				// An alert dialog
+ 				$scope.showAlert = function() {
+   					var alertPopup = $ionicPopup.alert({
+     					title: 'Error',
+     					template: 'There was an error processing the transaction'
+   					});
+ 				};
+				//error handling
+			} else {
+				$ionicLoading.hide();
+				console.log('voted ok with ballot ' + choice.ballot);
+				//message?
+			}
+		});
 	};
 })
 
