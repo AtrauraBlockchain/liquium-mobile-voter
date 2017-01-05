@@ -9,7 +9,7 @@
       </div>
       <div ngIf="!isDelegate" class="register-delegate">
         <h1>Be a delegate</h1>
-        <form class="register-delegate" name="form" ng-submit="registerAsDelegate(form)" novalidate="">
+        <form class="register-delegate" name="form" ng-submit="registerAsDelegate(delegateName)" novalidate="">
            <fieldset>
               <input type="text" id="name" ng-model="delegateName" placeholder="Delegate name" />
               <br />

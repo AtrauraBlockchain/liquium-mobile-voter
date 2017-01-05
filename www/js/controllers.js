@@ -127,11 +127,10 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 		}
 	});
 
-	$scope.registerAsDelegate = function(form) {
-		console.log($scope.delegateName);
-
-		if ($scope.delegateName) {
-			console.log($scope.delegateName);
+	$scope.registerAsDelegate = function(delegateName) {
+		console.log(delegateName);
+		if (delegateName) {
+			console.log(delegateName);
 		}
   };
 })
