@@ -172,8 +172,8 @@ angular.module('liquium', [
     url: "/delegation-panel/",
     views: {
       'menuContent': {
-        templateUrl: "views/app/delegates/delegation-panel.html",
-        controller: 'DelegationPanelCtrl'
+        templateUrl: "views/app/delegates/delegate-panel.html",
+        controller: 'DelegatePanelCtrl'
       }
     }
   })

@@ -113,11 +113,26 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 	});
 })
 
-.controller('DelegationPanelCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
-	$scope.categories_delegates = [];
+.controller('DelegatePanelCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
+	$scope.isDelegate = false;
 
 	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
-			$scope.categories_delegates = response.data.delegates;
+		for (var i = 0; i < response.data.delegates.length; ++i) {
+			var delegate = response.data.delegates[i];
+			if (delegate.owner == liquiumMobileLib.account)
+				$scope.idDelegate = delegate.idDelegate;
+				$scope.delegateName = delegate.name;
+				$scope.isDelegate = true;
+				break;
+		}
 	});
+
+	$scope.registerAsDelegate = function(form) {
+		console.log($scope.delegateName);
+
+		if ($scope.delegateName) {
+			console.log($scope.delegateName);
+		}
+  };
 })
 ;

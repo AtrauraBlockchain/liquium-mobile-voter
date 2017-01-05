@@ -1,0 +1,22 @@
+<ion-view class="category-delegates-view">
+  <ion-nav-title>
+    <span>Delegate Panel</span>
+  </ion-nav-title>
+  <ion-content>
+    <div class="row">
+      <div ngIf="isDelegate">
+
+      </div>
+      <div ngIf="!isDelegate" class="register-delegate">
+        <h1>Be a delegate</h1>
+        <form class="register-delegate" name="form" ng-submit="registerAsDelegate(form)" novalidate="">
+           <fieldset>
+              <input type="text" id="name" ng-model="delegateName" placeholder="Delegate name" />
+              <br />
+              <input class="button" type="submit" value="Register as delegate" />
+           </fieldset>
+        </form>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
