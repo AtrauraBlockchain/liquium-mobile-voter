@@ -152,6 +152,7 @@ angular.module('liquium', [
     url: "/profile",
     views: {
       'menuContent': {
+        controller: "ProfileCtrl",
         templateUrl: "views/app/profile.html"
       }
     }
@@ -163,6 +164,16 @@ angular.module('liquium', [
       'menuContent': {
         templateUrl: "views/app/delegates/delegates.html",
         controller: 'DelegatesCtrl'
+      }
+    }
+  })
+
+  .state('app.delegationPanel', {
+    url: "/delegation-panel/",
+    views: {
+      'menuContent': {
+        templateUrl: "views/app/delegates/delegation-panel.html",
+        controller: 'DelegationPanelCtrl'
       }
     }
   })

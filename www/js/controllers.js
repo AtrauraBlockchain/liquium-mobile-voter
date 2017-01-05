@@ -5,6 +5,11 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 
 })
 
+.controller('ProfileCtrl', function($scope, $http, ApiURL, ContractAddress) {
+	$scope.qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=" + liquiumMobileLib.account;
+	$scope.myAddress = liquiumMobileLib.account;
+})
+
 // POLLS
 //brings all poll categories
 .controller('PollsCategoriesCtrl', function($scope, $http, ApiURL, ContractAddress) {
@@ -101,6 +106,14 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 })
 
 .controller('DelegatesCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
+	$scope.categories_delegates = [];
+
+	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
+			$scope.categories_delegates = response.data.delegates;
+	});
+})
+
+.controller('DelegationPanelCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
 	$scope.categories_delegates = [];
 
 	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {

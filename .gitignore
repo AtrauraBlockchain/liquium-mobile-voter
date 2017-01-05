@@ -8,6 +8,7 @@ log.txt
 *.sublime-workspace
 
 .DS_Store
+build/
 .idea/
 .vscode/
 .sass-cache/
