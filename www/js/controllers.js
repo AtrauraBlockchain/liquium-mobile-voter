@@ -33,11 +33,11 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 })
 
 //bring specific category providers
-.controller('CategoryDelegatesCtrl', function($scope, $state, $http, $ionicLoading, $ionicPopup, $stateParams) {
+.controller('CategoryDelegatesCtrl', function($scope, $state, $http, $ionicLoading, $ionicPopup, $stateParams, ApiURL, ContractAddress) {
 	$scope.category_delegates = [];
 
 	$scope.category = $stateParams.category;
-	$http.get('views/app/example-jsons/delegates-categories.json').then(function(response) {
+	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address + "?voter=" + liquiumMobileLib.account).then(function(response) {
 		var category = _.find(response.data, {id: $scope.category});
 		$scope.categoryTitle = category.title;
 		$scope.category_delegates = category.delegates;
@@ -131,11 +131,25 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 })
 
 .controller('DelegatesCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
-	$scope.categories_delegates = [];
+	$scope.category_delegates = [];
 
-	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
-			$scope.categories_delegates = response.data.delegates;
+	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address + "?voter=" + liquiumMobileLib.account).then(function(response) {
+		for (category in response.data.categories) {
+			let delegate;
+			if (typeof response.data.categories[category].delegationList[0] !== 'undefined')
+				delegate = response.data.delegates[response.data.categories[category].delegationList[0]].name;
+			else {
+				delegate = "No delegate selected";
+			}
+			$scope.category_delegates.push({
+				id: response.data.categories[category].idCategory,
+				name: response.data.categories[category].name,
+				delegate: delegate
+			})
+
+		}
 	});
+
 })
 
 .controller('DelegatePanelCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
