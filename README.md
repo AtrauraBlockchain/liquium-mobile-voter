@@ -6,6 +6,8 @@ Liquium is an Open Source polling framework based in Smart Contracts running in 
 
 We've built a template for organizations which want to integrate a public, fair and transparent polling system, so they can modify it for their own context just forking this and its brother repositories.
 
+You can know more about Liquium in our [wiki](https://github.com/AtrauraBlockchain/liquium-mobile/wiki/About-Liquium).
+
 # Ionic App for the voters
 
 This will be the app used by the voters to vote and delegate their vote (if needed). This mobile app is multiplatform, which means that can be built and run in both Android and iOS.
