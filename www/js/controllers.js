@@ -1,4 +1,4 @@
-angular.module('liquium.controllers', [])
+angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 
 // APP
 .controller('AppCtrl', function($scope, $ionicConfig) {
@@ -7,20 +7,20 @@ angular.module('liquium.controllers', [])
 
 // POLLS
 //brings all poll categories
-.controller('PollsCategoriesCtrl', function($scope, $http) {
+.controller('PollsCategoriesCtrl', function($scope, $http, ApiURL, ContractAddress) {
 	$scope.poll_categories = [];
 
-	$http.get('http://localhost:8080/api/organization/0x5b1869d9a4c187f2eaa108f3062412ecf0526b24').then(function(response) {
+	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
 		$scope.poll_categories = response.data.categories;
 	});
 })
 
 //bring specific category providers
-.controller('CategoryPollsCtrl', function($scope, $http, $stateParams) {
+.controller('CategoryPollsCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
 	$scope.category_polls = [];
 
 	$scope.category = $stateParams.category;
-	$http.get('http://localhost:8080/api/organization/0x5b1869d9a4c187f2eaa108f3062412ecf0526b24').then(function(response) {
+	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
 		var category = _.find(response.data, {id: $scope.category});
 		$scope.categoryTitle = category.title;
 		$scope.category_polls = category.polls;
@@ -59,10 +59,10 @@ angular.module('liquium.controllers', [])
  })
 
 //bring specific category providers
-.controller('PollsListCtrl', function($scope, $http, $stateParams) {
+.controller('PollsListCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
 	$scope.polls = [];
 
-	$http.get('http://localhost:8080/api/organization/0x5b1869d9a4c187f2eaa108f3062412ecf0526b24').then(function(response) {
+	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
 		var respJson = response.data;
 		//console.log(respJson);
 		for (var poll in respJson.polls) {
@@ -72,7 +72,7 @@ angular.module('liquium.controllers', [])
 })
 
 //this method brings posts for a source provider
-.controller('PollCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state) {
+.controller('PollCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, ApiURL, ContractAddress) {
 
 	var pollId = $stateParams.pollId;
 	$scope.choice = -1;
@@ -81,7 +81,7 @@ angular.module('liquium.controllers', [])
 		template: 'Loading poll...'
 	});
 
-	$http.get('http://localhost:8080/api/organization/0x5b1869d9a4c187f2eaa108f3062412ecf0526b24').then(function(response) {
+	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
 
 		var respJson = response.data;
 		$scope.poll = respJson.polls[pollId];
@@ -100,10 +100,10 @@ angular.module('liquium.controllers', [])
 	};
 })
 
-.controller('DelegatesCtrl', function($scope, $http, $stateParams) {
+.controller('DelegatesCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
 	$scope.categories_delegates = [];
 
-	$http.get('http://localhost:8080/api/organization/0x5b1869d9a4c187f2eaa108f3062412ecf0526b24').then(function(response) {
+	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
 			$scope.categories_delegates = response.data.delegates;
 	});
 })

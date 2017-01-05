@@ -5,12 +5,19 @@ angular.module('underscore', [])
   return window._; // assumes underscore has already been loaded on the page
 });
 
-/*angular.module('ApiURL', [])
+angular.module('ApiURL', [])
 .factory('ApiURL', function() {
     return {
-        url : "localhost:8080"
+        url : "http://localhost:8080"
     };
-});*/
+});
+
+angular.module('ContractAddress', [])
+.factory('ContractAddress', function() {
+    return {
+        address : "0x5b1869d9a4c187f2eaa108f3062412ecf0526b24"
+    };
+});
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
