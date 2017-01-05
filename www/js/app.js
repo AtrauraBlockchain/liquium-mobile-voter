@@ -8,7 +8,7 @@ angular.module('underscore', [])
 angular.module('ApiURL', [])
 .factory('ApiURL', function() {
     return {
-        url : "http://localhost:8080"
+        url : "http://localhost:3000"
     };
 });
 
