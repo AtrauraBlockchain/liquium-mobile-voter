@@ -1,11 +1,11 @@
 <ion-view class="profile-view">
-  <ion-nav-title>
-    <span>Your Address</span>
-  </ion-nav-title>
-  <ion-content>
-    <div class="qr-code-div">
-      <img id="qr-code" ng-src="{{ qrUrl }}"/>
-    </div>
-    <h3 class="qr-text">{{ myAddress }}</h1>
+    <ion-nav-title>
+        <span>Your Address</span>
+    </ion-nav-title>
+    <ion-content>
+        <div class="qr-code-div">
+            <img id="qr-code" ng-src="{{ qrUrl }}" />
+        </div>
+        <h3 class="qr-text" ng-click="copyAddressToClipboard()">{{ myAddress }}</h1>
   </ion-content>
 </ion-view>

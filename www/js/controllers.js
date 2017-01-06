@@ -5,9 +5,26 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 
 })
 
-.controller('ProfileCtrl', function($scope, $http, ApiURL, ContractAddress) {
+.controller('ProfileCtrl', function($scope, $http, ApiURL, ContractAddress, $cordovaClipboard, $cordovaToast) {
 	$scope.qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=" + liquiumMobileLib.account;
 	$scope.myAddress = liquiumMobileLib.account;
+
+	$scope.copyAddressToClipboard = function() {
+		$cordovaClipboard
+    .copy(liquiumMobileLib.account)
+    .then(function () {
+      // success
+			$cordovaToast
+	    .show('Address copied to clipboard', 'long', 'center')
+	    .then(function(success) {
+	      // success
+	    }, function (error) {
+	      // error
+	    });
+    }, function () {
+      // error
+    });
+	};
 })
 
 // POLLS
@@ -123,8 +140,12 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 				//error handling
 			} else {
 				$ionicLoading.hide();
-				console.log('voted ok with txHash: ' + txHash);
-				//message?
+				$scope.showAlert = function() {
+   					var alertPopup = $ionicPopup.alert({
+     					title: 'Voted successfully',
+     					template: 'Transaction Hash: ' + txHash
+   					});
+ 				};
 			}
 		});
 	};
