@@ -1,4 +1,4 @@
-# Liquim Mobile
+# Liquim Mobile Voter App
 
 [![node](http://img.shields.io/badge/node-6.3.1-brightgreen.svg)]()
 
