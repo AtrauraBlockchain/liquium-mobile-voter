@@ -130,29 +130,25 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 			if(err){
 				$ionicLoading.hide();
  				// An alert dialog
- 				$scope.showAlert = function() {
-   					var alertPopup = $ionicPopup.alert({
+ 				$ionicPopup.alert({
      					title: 'Error',
      					template: 'There was an error processing the transaction'
-   					});
- 				};
-				//error handling
+   			});
 			} else {
 				$ionicLoading.hide();
-				$scope.showAlert = function() {
-   					var alertPopup = $ionicPopup.alert({
+				$ionicPopup.alert({
      					title: 'Voted successfully',
      					template: 'Transaction Hash: ' + txHash
-   					});
- 				};
+   			});
 			}
 		});
 	};
 })
 
-.controller('DelegatesCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
+.controller('DelegatesCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress, $ionicPopup, $ionicLoading, $cordovaClipboard, $cordovaToast) {
 	$scope.category_delegates = [];
 	$scope.all_delegates = [];
+	$scope.new_delegates = [];
 
 	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address + "?voter=" + liquiumMobileLib.account).then(function(response) {
 		$scope.all_delegates.push(
@@ -166,11 +162,11 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 			$scope.all_delegates.push(response.data.delegates[delegate]);
 		}
 		for (var category in response.data.categories) {
-			var delegate;
+			var deleg;
 			if (typeof response.data.categories[category].delegationList[0] !== 'undefined')
-				delegate = response.data.delegates[response.data.categories[category].delegationList[0]];
+				deleg = response.data.delegates[response.data.categories[category].delegationList[0]];
 			else {
-				delegate =  {
+				deleg =  {
 		      "idDelegate": 0,
 		      "name": "Nobody",
 		      "owner": "0",
@@ -180,10 +176,71 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 			$scope.category_delegates.push({
 				id: response.data.categories[category].idCategory,
 				name: response.data.categories[category].name,
-				delegate: delegate
+				delegate: deleg
 			});
 		}
 	});
+
+	$scope.changeDel = function(del, cat) {
+		$scope.new_delegates[cat.id] = del;
+	};
+
+	$scope.delegateVote = function() {
+		var categoryIds = [];
+		var delegates = [];
+		for (var del in $scope.new_delegates) {
+			if ($scope.new_delegates[del]) {
+				categoryIds.push(del);
+				delegates.push($scope.new_delegates[del]);
+			}
+		}
+		$ionicLoading.show({
+			template: 'Sending transaction...'
+		});
+		liquiumMobileLib.setDelegates(ContractAddress.address, categoryIds, delegates, function (err, txHash){
+			if(err){
+				$ionicLoading.hide();
+ 				// An alert dialog
+ 				$ionicPopup.alert({
+     					title: 'Error',
+     					template: 'There was an error processing the transaction'
+   			});
+				//error handling
+			} else {
+				$ionicLoading.hide();
+				$ionicPopup.show({
+   					title: 'Delegates changed successfully',
+   					template: 'Transaction Hash: ' + txHash,
+						buttons: [
+			      { text: 'Ok',
+							type: 'button-positive',
+							onTap: function(e) {
+							}
+						},
+			      {
+			        text: 'Copy txHash',
+							type: 'button-positive',
+							onTap: function(e) {
+								$cordovaClipboard
+						    .copy(txHash)
+						    .then(function () {
+						      // success
+									$cordovaToast
+							    .show('Transaction Hash copied to clipboard', 'long', 'center')
+							    .then(function(success) {
+							      // success
+							    }, function (error) {
+							      // error
+							    });
+						    }, function () {
+						      // error
+						    });
+							}
+			      }]}
+					);
+				}
+			});
+	};
 
 })
 
