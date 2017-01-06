@@ -1,20 +1,24 @@
 <ion-view class="category-polls-view">
-  <ion-nav-title>
-    <span>Delegation Panel</span>
-  </ion-nav-title>
-  <ion-content>
-    <div class="list delegates-category-row">
-      <a ng-repeat="cat_del in category_delegates" class="item item-icon-right" ui-sref="app.category-delegates({category: (cat_del.id)})">
-        <div class="row category-row">
-          <div class="delegates-category col-md-6">
-            <span class="title">{{cat_del.name}}</span>
-          </div>
-          <div class="category-delegate col-md-6">
-            <span class="title">{{cat_del.delegate}}</span>
-          </div>
-          <p class="icon" style="font-size: 20px">Edit</p>
+    <ion-nav-title>
+        <span>Delegation Panel</span>
+    </ion-nav-title>
+    <ion-content>
+        <div class="list delegates-category-row">
+            <div ng-repeat="cat_del in category_delegates" class="item item-icon-right">
+                <div class="row category-row">
+                    <div class="delegates-category col-md-10">
+                        <span class="title">{{cat_del.name}}</span>
+                    </div>
+                    <select class="col-md-2" ng-model="selected_delegate">
+                        <option ng-if="del.idDelegate == cat_del.delegate.idDelegate" ng-repeat="del in all_delegates" ng-value="del.idDelegate" selected>
+                            {{del.name}}
+                        </option>
+                        <option ng-if="del.idDelegate !== cat_del.delegate.idDelegate" ng-repeat="del in all_delegates" ng-value="del.idDelegate">
+                            {{del.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
         </div>
-      </a>
-    </div>
-  </ion-content>
+    </ion-content>
 </ion-view>

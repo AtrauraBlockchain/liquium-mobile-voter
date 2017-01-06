@@ -1,10 +1,10 @@
 {
   "name": "liquium",
   "private": "true",
+  "directory": "www/lib",
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.0.1"
   },
-  "directory": "www/lib",
   "dependencies": {
     "underscore": "~1.8.3",
     "ngmap": "~1.9.0",

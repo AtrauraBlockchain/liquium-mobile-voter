@@ -49,7 +49,6 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 	});
 })
 
-//bring specific category providers
 .controller('CategoryDelegatesCtrl', function($scope, $state, $http, $ionicLoading, $ionicPopup, $stateParams, ApiURL, ContractAddress) {
 	$scope.category_delegates = [];
 
@@ -153,14 +152,30 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 
 .controller('DelegatesCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
 	$scope.category_delegates = [];
+	$scope.all_delegates = [];
 
 	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address + "?voter=" + liquiumMobileLib.account).then(function(response) {
+		$scope.all_delegates.push(
+			delegate =  {
+				"idDelegate": 0,
+				"name": "Nobody",
+				"owner": "0",
+				"deleted": false
+			});
+		for (var delegate in response.data.delegates) {
+			$scope.all_delegates.push(response.data.delegates[delegate]);
+		}
 		for (var category in response.data.categories) {
 			var delegate;
 			if (typeof response.data.categories[category].delegationList[0] !== 'undefined')
-				delegate = response.data.delegates[response.data.categories[category].delegationList[0]].name;
+				delegate = response.data.delegates[response.data.categories[category].delegationList[0]];
 			else {
-				delegate = "No delegate selected";
+				delegate =  {
+		      "idDelegate": 0,
+		      "name": "Nobody",
+		      "owner": "0",
+		      "deleted": false
+		    };
 			}
 			$scope.category_delegates.push({
 				id: response.data.categories[category].idCategory,
