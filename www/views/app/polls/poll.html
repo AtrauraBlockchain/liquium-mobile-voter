@@ -1,4 +1,4 @@
-<ion-view class="poll-entries-view">
+<ion-view class="category-polls-view">
   <ion-nav-title>
     <span>{{ poll.title }}</span>
   </ion-nav-title>
@@ -9,10 +9,10 @@
         <div class="poll-heading item item-text-wrap">
           <h2 class="poll-title" ng-bind-html="poll.title | rawHtml"></h2>
           <p class="poll-date">
-            <b>Poll open until</b> <span>{{ poll.closeTime | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}</span>
+            <b>Poll open until: </b> <span>{{ poll.closeTime | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}</span>
           </p>
           <p class="poll-date">
-            <b>Close for delegates:</b> <span>{{ poll.closeDelegateTime | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}</span>
+            <b>Closing for delegates: </b> <span>{{ poll.closeDelegateTime | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}</span>
           </p>
         </div>
         <div class="poll-content item item-text-wrap">

@@ -94,13 +94,13 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 
 		$scope.hasVoted = false;
 		totalVoted = 0;
-		for (ballotId in respJson.polls[pollId].vote.ballots) {
+		for (var ballotId in respJson.polls[pollId].vote.ballots) {
 			totalVoted += respJson.polls[pollId].vote.ballots[ballotId].amount;
 			if (respJson.polls[pollId].vote.ballots[ballotId].amount == 100)
 				$scope.votedOption = respJson.polls[pollId].options[ballotId].answer;
 		}
 		if (totalVoted == 100)
-			$scope.hasVoted = true
+			$scope.hasVoted = true;
 
 
 		$ionicLoading.hide();
@@ -134,8 +134,8 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 	$scope.category_delegates = [];
 
 	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address + "?voter=" + liquiumMobileLib.account).then(function(response) {
-		for (category in response.data.categories) {
-			let delegate;
+		for (var category in response.data.categories) {
+			var delegate;
 			if (typeof response.data.categories[category].delegationList[0] !== 'undefined')
 				delegate = response.data.delegates[response.data.categories[category].delegationList[0]].name;
 			else {
@@ -145,8 +145,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 				id: response.data.categories[category].idCategory,
 				name: response.data.categories[category].name,
 				delegate: delegate
-			})
-
+			});
 		}
 	});
 

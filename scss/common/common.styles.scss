@@ -4,9 +4,13 @@
 	color: $content-color;
 }
 
-.bar.app-top-bar
+#navbar {
+	background-color: #00838F;
+}
+
+.bar
 {
-	background-color: $top-bar-bg;
+	background-color: $top-bar-bg !important;
 
 	.title
 	{
