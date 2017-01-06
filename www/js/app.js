@@ -118,16 +118,6 @@ angular.module('liquium', [
     }
   })
 
-  .state('app.category-delegates', {
-    url: "/:category/delegates",
-    views: {
-      'menuContent': {
-        templateUrl: "views/app/delegates/category-delegates.html",
-        controller: 'CategoryDelegatesCtrl'
-      }
-    }
-  })
-
   .state('app.polls-list', {
     url: "/polls/",
     views: {
@@ -164,16 +154,6 @@ angular.module('liquium', [
       'menuContent': {
         templateUrl: "views/app/delegates/delegates.html",
         controller: 'DelegatesCtrl'
-      }
-    }
-  })
-
-  .state('app.delegationPanel', {
-    url: "/delegation-panel/",
-    views: {
-      'menuContent': {
-        templateUrl: "views/app/delegates/delegate-panel.html",
-        controller: 'DelegatePanelCtrl'
       }
     }
   })
