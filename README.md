@@ -24,7 +24,7 @@ This app let's the voter do the following things:
 
 ### Test and build your own Liquium Voter App
 
-You can find a tutorial about how to [Test and build your own Liquium Voter App](https://github.com/AtrauraBlockchain/liquium-mobile/wiki/Test-and-build-your-own-Liquium-Voter-App) in our [wiki](https://github.com/AtrauraBlockchain/liquium-mobile/wiki/Test-and-build-your-own-Liquium-Voter-App).
+You can find a tutorial about how to [Test and build your own Liquium Voter App](https://github.com/AtrauraBlockchain/liquium-mobile-voter/wiki/Test-and-build-your-own-Liquium-Voter-App) in our [wiki](https://github.com/AtrauraBlockchain/liquium-mobile-voter/wiki/Test-and-build-your-own-Liquium-Voter-App).
 
 ### Publishing your app
 
