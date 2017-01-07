@@ -106,6 +106,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 
 		respJson = response.data;
 		$scope.poll = respJson.polls[pollId];
+		$scope.poll.category = respJson.categories[respJson.polls[pollId].idCategory].name;
 
 		$scope.hasVoted = false;
 		totalVoted = 0;
