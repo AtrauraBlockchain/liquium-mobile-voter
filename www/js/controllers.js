@@ -93,7 +93,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 })
 
 //this method brings posts for a source provider
-.controller('PollCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, ApiURL, ContractAddress) {
+.controller('PollCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, $ionicPopup, ApiURL, ContractAddress) {
 
 	var pollId = $stateParams.pollId;
 	var respJson;
@@ -132,7 +132,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
  				// An alert dialog
  				$ionicPopup.alert({
      					title: 'Error',
-     					template: 'There was an error processing the transaction'
+     					template: "You're not in the census"
    			});
 			} else {
 				$ionicLoading.hide();
