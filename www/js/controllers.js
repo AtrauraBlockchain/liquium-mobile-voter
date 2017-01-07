@@ -85,7 +85,6 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 
 	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address + "?voter=" + liquiumMobileLib.account).then(function(response) {
 		var respJson = response.data;
-		//console.log(respJson);
 		for (var poll in respJson.polls) {
 		  $scope.polls.push(respJson.polls[poll]);
 		}
@@ -132,8 +131,8 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
  				// An alert dialog
  				$ionicPopup.alert({
      					title: 'Error',
-     					template: "You're not in the census"
-   			});
+     					template: 'There was an error processing the transaction'
+   				});
 			} else {
 				$ionicLoading.hide();
 				$ionicPopup.alert({
