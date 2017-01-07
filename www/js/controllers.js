@@ -131,8 +131,8 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
  				// An alert dialog
  				$ionicPopup.alert({
      					title: 'Error',
-     					template: 'There was an error processing the transaction'
-   				});
+	   					template: "You're not in the census"
+	 			});
 			} else {
 				$ionicLoading.hide();
 				$ionicPopup.alert({
