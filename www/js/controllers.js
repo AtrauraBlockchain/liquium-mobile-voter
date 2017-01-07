@@ -136,10 +136,36 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 	 			});
 			} else {
 				$ionicLoading.hide();
-				$ionicPopup.alert({
-     					title: 'Voted successfully',
-     					template: 'Transaction Hash: ' + txHash
-   			});
+				$ionicPopup.show({
+   					title: 'You voted successfully',
+   					template: 'Transaction Hash: ' + txHash,
+						buttons: [
+			      { text: 'Ok',
+							type: 'button-positive',
+							onTap: function(e) {
+							}
+						},
+			      {
+			        text: 'Copy txHash',
+							type: 'button-positive',
+							onTap: function(e) {
+								$cordovaClipboard
+						    .copy(txHash)
+						    .then(function () {
+						      // success
+									$cordovaToast
+							    .show('Transaction Hash copied to clipboard', 'long', 'center')
+							    .then(function(success) {
+							      // success
+							    }, function (error) {
+							      // error
+							    });
+						    }, function () {
+						      // error
+						    });
+							}
+			      }]}
+					);
 			}
 		});
 	};
@@ -242,27 +268,4 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 			});
 	};
 
-})
-
-.controller('DelegatePanelCtrl', function($scope, $http, $stateParams, ApiURL, ContractAddress) {
-	$scope.isDelegate = false;
-
-	$http.get(ApiURL.url + '/api/organization/' + ContractAddress.address).then(function(response) {
-		for (var i = 0; i < response.data.delegates.length; ++i) {
-			var delegate = response.data.delegates[i];
-			if (delegate.owner == liquiumMobileLib.account)
-				$scope.idDelegate = delegate.idDelegate;
-				$scope.delegateName = delegate.name;
-				$scope.isDelegate = true;
-				break;
-		}
-	});
-
-	$scope.registerAsDelegate = function(delegateName) {
-		console.log(delegateName);
-		if (delegateName) {
-			console.log(delegateName);
-		}
-  };
-})
-;
+});

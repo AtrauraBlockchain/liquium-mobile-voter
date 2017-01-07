@@ -15,7 +15,7 @@ angular.module('ApiURL', [])
 angular.module('ContractAddress', [])
 .factory('ContractAddress', function() {
     return {
-        address : "0xeccb81209faafd36ed20e75532e59c3de9e29b46"
+        address : "0x76317d551d9304d727d0cc5d8cd82f7403d3fe95"
     };
 });
 
