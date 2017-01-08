@@ -3,17 +3,17 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 // APP
 .controller('AppCtrl', function($scope, $ionicConfig, ApiURL, ContractAddress) {
 	liquiumMobileLib.getAllInfo(ContractAddress.address, function(err,res) {
-		$scope.username = JSON.parse(res).voter.name;
-		if (typeof $scope.username == 'undefined')
-			$scope.username = 'User';
+		var response = JSON.parse(res);
+		if (typeof response.voter !== 'undefined')
+			$scope.username = JSON.parse(res).voter.name;
+		else
+			$scope.username = 'user';
 	});
 })
 
 .controller('ProfileCtrl', function($scope, $http, ApiURL, ContractAddress, $cordovaClipboard, $cordovaToast) {
 	$scope.qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=" + liquiumMobileLib.account;
 	$scope.myAddress = liquiumMobileLib.account;
-	liquiumMobileLib.getAllInfo(ContractAddress.address, function(err,res) {console.log(res)});
-
 
 	$scope.copyAddressToClipboard = function() {
 		$cordovaClipboard
@@ -55,7 +55,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 	});
 })
 
-.controller('CategoryDelegatesCtrl', function($scope, $state, $http, $ionicLoading, $ionicPopup, $stateParams, ApiURL, ContractAddress) {
+.controller('CategoryDelegatesCtrl', function($scope, $state, $http, $ionicLoading, $ionicPopup, $cordovaClipboard, $stateParams, ApiURL, ContractAddress) {
 	$scope.category_delegates = [];
 
 	$scope.category = $stateParams.category;
@@ -93,12 +93,13 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 		var respJson = response.data;
 		for (var poll in respJson.polls) {
 		  $scope.polls.push(respJson.polls[poll]);
+			console.log(respJson.polls[poll]);
 		}
 	});
 })
 
 //this method brings posts for a source provider
-.controller('PollCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, $ionicPopup, ApiURL, ContractAddress) {
+.controller('PollCtrl', function($scope, $stateParams, $http, $q, $ionicLoading, $state, $cordovaClipboard, $ionicPopup, ApiURL, ContractAddress) {
 
 	var pollId = $stateParams.pollId;
 	var respJson;
@@ -116,13 +117,15 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 
 		$scope.hasVoted = false;
 		totalVoted = 0;
-		for (var ballotId in respJson.polls[pollId].vote.ballots) {
-			totalVoted += respJson.polls[pollId].vote.ballots[ballotId].amount;
-			if (respJson.polls[pollId].vote.ballots[ballotId].amount == 100)
-				$scope.votedOption = respJson.polls[pollId].options[ballotId].answer;
+		if (typeof respJson.polls[pollId].vote !== 'undefined') {
+			for (var ballotId in respJson.polls[pollId].vote.ballots) {
+				totalVoted += respJson.polls[pollId].vote.ballots[ballotId].amount;
+				if (respJson.polls[pollId].vote.ballots[ballotId].amount == 100)
+					$scope.votedOption = respJson.polls[pollId].options[ballotId].answer;
+			}
+			if (totalVoted == 100)
+				$scope.hasVoted = true;
 		}
-		if (totalVoted == 100)
-			$scope.hasVoted = true;
 
 
 		$ionicLoading.hide();
@@ -132,7 +135,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 		$ionicLoading.show({
 			template: 'Sending transaction...'
 		});
-		liquiumMobileLib.vote(ContractAddress.address, pollId, [choice], [web3.toWei(1)], function (err, txHash){
+		liquiumMobileLib.vote(ContractAddress.address, pollId, [choice], [web3.toWei(1)], '', function (err, txHash){
 			if(err){
 				$ionicLoading.hide();
  				// An alert dialog
@@ -195,8 +198,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 		}
 		for (var category in response.data.categories) {
 			var deleg;
-			console.log(response.data.categories[category]);
-			if (typeof response.data.categories[category].delegationList[0] !== 'undefined')
+			if (typeof response.data.categories[category].delegationList !== 'undefined')
 				deleg = response.data.delegates[response.data.categories[category].delegationList[0]];
 			else {
 				deleg =  {
