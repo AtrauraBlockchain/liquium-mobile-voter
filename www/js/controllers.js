@@ -1,13 +1,19 @@
 angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 
 // APP
-.controller('AppCtrl', function($scope, $ionicConfig) {
-
+.controller('AppCtrl', function($scope, $ionicConfig, ApiURL, ContractAddress) {
+	liquiumMobileLib.getAllInfo(ContractAddress.address, function(err,res) {
+		$scope.username = JSON.parse(res).voter.name;
+		if (typeof $scope.username == 'undefined')
+			$scope.username = 'User';
+	});
 })
 
 .controller('ProfileCtrl', function($scope, $http, ApiURL, ContractAddress, $cordovaClipboard, $cordovaToast) {
 	$scope.qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=" + liquiumMobileLib.account;
 	$scope.myAddress = liquiumMobileLib.account;
+	liquiumMobileLib.getAllInfo(ContractAddress.address, function(err,res) {console.log(res)});
+
 
 	$scope.copyAddressToClipboard = function() {
 		$cordovaClipboard
@@ -189,6 +195,7 @@ angular.module('liquium.controllers', ['ApiURL', 'ContractAddress'])
 		}
 		for (var category in response.data.categories) {
 			var deleg;
+			console.log(response.data.categories[category]);
 			if (typeof response.data.categories[category].delegationList[0] !== 'undefined')
 				deleg = response.data.delegates[response.data.categories[category].delegationList[0]];
 			else {
